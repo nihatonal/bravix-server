@@ -20,6 +20,7 @@ function getCorsHeaders(origin: string | null) {
 
 export async function OPTIONS(req: Request) {
   const origin = req.headers.get("origin");
+
   return new Response(null, {
     status: 204,
     headers: getCorsHeaders(origin),
@@ -30,24 +31,30 @@ export async function POST(req: Request) {
   const origin = req.headers.get("origin");
 
   try {
-    const { email, message } = await req.json();
+    const { name, email, phone, form_subject, message } = await req.json();
 
     const data = await resend.emails.send({
       from: "onboarding@resend.dev",
-      to: email,
-      subject: "Test mail",
-      html: `<p>${message}</p>`,
+      to: "bravixcreative@gmail.com",
+      subject: `Yeni İletişim Formu: ${form_subject || "Konu yok"}`,
+      html: `
+        <h2>Yeni iletişim formu mesajı</h2>
+        <p><strong>Ad:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Telefon:</strong> ${phone}</p>
+        <p><strong>Konu:</strong> ${form_subject}</p>
+        <p><strong>Mesaj:</strong></p>
+        <p>${message}</p>
+      `,
     });
 
     return Response.json(
       { ok: true, data },
-      {
-        headers: getCorsHeaders(origin),
-      }
+      { headers: getCorsHeaders(origin) }
     );
   } catch (error) {
     return Response.json(
-      { ok: false, error: "Mail gönderilemedi" },
+      { ok: false, error: "Mail gönderilemedi." },
       {
         status: 500,
         headers: getCorsHeaders(origin),
