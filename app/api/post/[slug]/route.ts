@@ -44,11 +44,11 @@ export async function GET(
       { ok: true, data: post },
       { headers: getCorsHeaders(origin) }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error("post-by-slug error:", error);
 
     return Response.json(
-      { ok: false, error: "Post alınamadı." },
+      { ok: false, error: error?.message || "Post alınamadı." },
       { status: 500, headers: getCorsHeaders(origin) }
     );
   }
