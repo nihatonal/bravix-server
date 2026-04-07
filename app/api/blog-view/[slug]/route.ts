@@ -42,7 +42,7 @@ export async function POST(
     }
 
     const post = await sanityWriteClient.fetch(
-      `*[_type == "blog" && slug.current == $slug][0]{
+      `*[_type == "blog_bravix" && slug.current == $slug][0]{
         _id,
         views
       }`,
