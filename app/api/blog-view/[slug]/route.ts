@@ -74,7 +74,12 @@ export async function POST(
         headers: getCorsHeaders(origin),
       }
     );
-  } catch (error) {
+  } catch (error:any) {
+    console.error("blog-view error:", error);
+    console.error("blog-view error message:", error?.message);
+    console.error("blog-view error statusCode:", error?.statusCode);
+    console.error("blog-view error responseBody:", error?.responseBody);
+
     console.error("blog-view error:", error);
 
     return Response.json(
