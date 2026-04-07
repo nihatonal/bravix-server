@@ -76,6 +76,15 @@ export const POST_BY_SLUG_QUERY = defineQuery(`
       title,
       "slug": slug.current
     },
+    "translations": *[
+      _type == "blog_bravix" &&
+      published == true &&
+      translationGroup == ^.translationGroup
+    ]{
+      lang,
+      "slug": slug.current,
+      title
+    }
   }
 `);
 
