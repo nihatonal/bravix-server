@@ -1,6 +1,4 @@
-import { defineQuery } from "next-sanity";
-
-export const POSTS_QUERY = defineQuery(`
+export const POSTS_QUERY = `
   *[
     _type == "blog_bravix" &&
     published == true &&
@@ -21,6 +19,7 @@ export const POSTS_QUERY = defineQuery(`
       alt
     },
     lang,
+    translationGroup,
     "category": category->{
       title,
       "slug": slug.current
@@ -29,11 +28,11 @@ export const POSTS_QUERY = defineQuery(`
     "tags": tags[]->{
       title,
       "slug": slug.current
-    },
+    }
   }
-`);
+`;
 
-export const POST_SLUGS_QUERY = defineQuery(`
+export const POST_SLUGS_QUERY = `
   *[
     _type == "blog_bravix" &&
     published == true &&
@@ -42,9 +41,9 @@ export const POST_SLUGS_QUERY = defineQuery(`
   ][]{
     "slug": slug.current
   }
-`);
+`;
 
-export const POST_BY_SLUG_QUERY = defineQuery(`
+export const POST_BY_SLUG_QUERY = `
   *[
     _type == "blog_bravix" &&
     published == true &&
@@ -75,24 +74,16 @@ export const POST_BY_SLUG_QUERY = defineQuery(`
     "tags": tags[]->{
       title,
       "slug": slug.current
-    },
-    "translations": *[
-      _type == "blog_bravix" &&
-      published == true &&
-      translationGroup == ^.translationGroup
-    ]{
-      lang,
-      "slug": slug.current,
-      title
     }
   }
-`);
+`;
 
-export const LATEST_BLOGS_QUERY = defineQuery(`
+export const LATEST_BLOGS_QUERY = `
   *[
     _type == "blog_bravix" &&
     published == true &&
-    isLatest == true
+    isLatest == true &&
+    lang == $lang
   ] | order(publishedAt desc)[0...4]{
     _id,
     title,
@@ -108,6 +99,7 @@ export const LATEST_BLOGS_QUERY = defineQuery(`
       alt
     },
     lang,
+    translationGroup,
     "category": category->{
       title,
       "slug": slug.current
@@ -116,23 +108,11 @@ export const LATEST_BLOGS_QUERY = defineQuery(`
     "tags": tags[]->{
       title,
       "slug": slug.current
-    },
+    }
   }
-`);
+`;
 
-export const BLOG_TRANSLATIONS_QUERY = defineQuery(`
-  *[
-    _type == "blog_bravix" &&
-    published == true &&
-    translationGroup == $translationGroup
-  ]{
-    lang,
-    "slug": slug.current,
-    title
-  }
-`);
-
-export const POPULAR_BLOGS_QUERY = defineQuery(`
+export const POPULAR_BLOGS_QUERY = `
   *[
     _type == "blog_bravix" &&
     published == true &&
@@ -152,6 +132,7 @@ export const POPULAR_BLOGS_QUERY = defineQuery(`
       alt
     },
     lang,
+    translationGroup,
     "category": category->{
       title,
       "slug": slug.current
@@ -160,11 +141,11 @@ export const POPULAR_BLOGS_QUERY = defineQuery(`
     "tags": tags[]->{
       title,
       "slug": slug.current
-    },
+    }
   }
-`);
+`;
 
-export const FEATURED_BLOG_QUERY = defineQuery(`
+export const FEATURED_BLOG_QUERY = `
   *[
     _type == "blog_bravix" &&
     published == true &&
@@ -185,6 +166,7 @@ export const FEATURED_BLOG_QUERY = defineQuery(`
       alt
     },
     lang,
+    translationGroup,
     "category": category->{
       title,
       "slug": slug.current
@@ -193,6 +175,20 @@ export const FEATURED_BLOG_QUERY = defineQuery(`
     "tags": tags[]->{
       title,
       "slug": slug.current
-    },
+    }
   }
-`);
+`;
+
+export const ALL_BLOG_SLUGS_WITH_GROUPS_QUERY = `
+  *[
+    _type == "blog_bravix" &&
+    published == true &&
+    defined(slug.current) &&
+    defined(translationGroup)
+  ]{
+    translationGroup,
+    lang,
+    "slug": slug.current,
+    title
+  }
+`;

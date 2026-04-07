@@ -24,13 +24,13 @@ export async function GET(req: Request) {
 
     return Response.json(
       { ok: true, data: slugs },
-      { headers: getCorsHeaders(origin) }
+      { status: 200, headers: getCorsHeaders(origin) }
     );
-  } catch (error) {
+  } catch (error: any) {
     console.error("post-slugs error:", error);
 
     return Response.json(
-      { ok: false, error: "Slug listesi alınamadı." },
+      { ok: false, error: error?.message || "Slug listesi alınamadı." },
       { status: 500, headers: getCorsHeaders(origin) }
     );
   }

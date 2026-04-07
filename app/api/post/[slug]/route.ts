@@ -42,7 +42,7 @@ export async function GET(
 
     return Response.json(
       { ok: true, data: post },
-      { headers: getCorsHeaders(origin) }
+      { status: 200, headers: getCorsHeaders(origin) }
     );
   } catch (error: any) {
     console.error("post-by-slug error:", error);
