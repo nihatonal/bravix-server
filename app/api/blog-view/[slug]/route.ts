@@ -1,25 +1,8 @@
 import { sanityWriteClient } from "@/lib/sanity";
-
-const allowedOrigins = ["http://localhost:3000", "https://bravixcreative.com"];
-
-function getCorsHeaders(origin: string | null) {
-  const allowedOrigin =
-    origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
-
-  return {
-    "Access-Control-Allow-Origin": allowedOrigin,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-  };
-}
+import { getCorsHeaders, handleOptions } from "@/lib/api";
 
 export async function OPTIONS(req: Request) {
-  const origin = req.headers.get("origin");
-
-  return new Response(null, {
-    status: 204,
-    headers: getCorsHeaders(origin),
-  });
+  return handleOptions(req);
 }
 
 export async function POST(
@@ -74,13 +57,11 @@ export async function POST(
         headers: getCorsHeaders(origin),
       }
     );
-  } catch (error:any) {
+  } catch (error: any) {
     console.error("blog-view error:", error);
     console.error("blog-view error message:", error?.message);
     console.error("blog-view error statusCode:", error?.statusCode);
     console.error("blog-view error responseBody:", error?.responseBody);
-
-    console.error("blog-view error:", error);
 
     return Response.json(
       { ok: false, error: "View artırılamadı." },
