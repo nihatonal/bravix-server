@@ -10,7 +10,9 @@ export async function GET(req: Request) {
   const origin = req.headers.get("origin");
 
   try {
-    const posts = await sanityClient.fetch(LATEST_BLOGS_QUERY);
+    const { searchParams } = new URL(req.url);
+    const lang = searchParams.get("lang")?.toLowerCase() || "en";
+    const posts = await sanityClient.fetch(LATEST_BLOGS_QUERY, { lang });
 
     return Response.json(
       { ok: true, data: posts },
